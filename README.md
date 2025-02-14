@@ -16,7 +16,7 @@ However no more than three balls can be rolled in tenth frame.
 Write a class Game that has two methods
 
 ```
-function roll(n: number): void`
+function roll(n: number): void
 ``` 
 
 is called each time the player rolls a ball. The argument is the number of pins knocked down.
