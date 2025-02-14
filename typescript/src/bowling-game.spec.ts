@@ -30,4 +30,17 @@ describe("bowling game", () => {
         expect(game.frame()).toBe(2);
         expect(game.score()).toBe(16);
     });
+
+    it("scores a strike, and then normal frame, and a roll", () => {
+        expect(game.frame()).toBe(1);
+        game.roll(10);
+        expect(game.frame()).toBe(2);
+        game.roll(6);
+        expect(game.frame()).toBe(2);
+        game.roll(2);
+        expect(game.frame()).toBe(3);
+        game.roll(2);
+        expect(game.frame()).toBe(3);
+        expect(game.score()).toBe(28);
+    });
 });
