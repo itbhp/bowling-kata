@@ -7,7 +7,7 @@ export class Game {
         this.currentFrame = new GenericFrame();
         this.frames = [];
     }
-    
+
     score(): number {
         const currentFrameScore = this.currentFrame.score();
         return this.frames.length == 0
@@ -24,7 +24,7 @@ export class Game {
     };
 
     frame(): number {
-        return this.frames.length + 1;
+        return Math.min(this.frames.length + 1, 10);
     }
 }
 
