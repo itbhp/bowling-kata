@@ -8,16 +8,16 @@ export class Game {
         this.frames = [];
     }
     score(): number {
+        const currentFrameScore = this.currentFrame.score();
         return this.frames.length == 0
-            ? this.currentFrame.score()
-            : this.frames.map(it => it.score()).reduce(addNumbers);
+            ? currentFrameScore
+            : currentFrameScore + this.frames.map(it => it.score()).reduce(addNumbers);
     }
-
     roll(n: number): void {
-        this.currentFrame.roll(n);
-        if (this.currentFrame.isCompleted()) {
+        const rollResult = this.currentFrame.roll(n);
+        if (typeof rollResult === "object") {
             this.frames.push(this.currentFrame);
-            this.currentFrame = new GenericFrame();
+            this.currentFrame = rollResult;
         }
     };
 
@@ -28,25 +28,43 @@ export class Game {
 
 interface Frame {
     score(): number;
-    roll(n: number): unknown;
-    isCompleted(): boolean
+    roll(n: number): Frame | void;
+    rolls: number[]
 }
 
 class GenericFrame implements Frame {
-    private rolls: number[]
+
+    private nextFrame: Frame
 
     constructor() {
         this.rolls = []
     }
-    score(): number {
-        return this.rolls.reduce(addNumbers);
-    }
-    isCompleted(): boolean {
+
+    rolls: number[];
+
+    private isCompleted(): boolean {
         return this.rolls.length >= 2 || this.score() >= 10
     }
+    private isSpare(): boolean {
+        return this.rolls.length == 2 && this.rolls[0] + this.rolls[1] == 10
+    }
 
-    roll(n: number): void {
+    score(): number {
+        const pinsRolledDown = this.rolls.length == 0 ? 0 : this.rolls.reduce(addNumbers);
+        if (this.isSpare()) {
+            const nextFrameRolls = this.nextFrame.rolls;
+            return nextFrameRolls.length == 0 ? 10 : 10 + nextFrameRolls[0];
+        }
+        return pinsRolledDown;
+    }
+
+    roll(n: number): Frame | void {
         this.rolls.push(n);
+        if (this.isCompleted()) {
+            const frame = new GenericFrame();
+            this.nextFrame = frame;
+            return frame;
+        }
     }
 }
 

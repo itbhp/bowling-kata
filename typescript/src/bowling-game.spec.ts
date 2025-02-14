@@ -21,4 +21,13 @@ describe("bowling game", () => {
         expect(game.frame()).toBe(2);
         expect(game.score()).toBe(9);
     });
+
+    it("scores a spare, and then rolls < 10", () => {
+        game.roll(4);
+        expect(game.frame()).toBe(1);
+        game.roll(6);
+        game.roll(3)
+        expect(game.frame()).toBe(2);
+        expect(game.score()).toBe(16);
+    });
 });
