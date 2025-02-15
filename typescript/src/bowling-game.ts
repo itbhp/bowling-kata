@@ -62,7 +62,7 @@ class Frame {
             }
             return 10 + this.nextFrame.pinsDownOnNext(1) + this.nextFrame.pinsDownOnNext(2);
         }
-        return this.rolls.length == 0 ? 0 : this.rolls.reduce(addNumbers);
+        return this.rolls.reduce(addNumbers, 0);
     }
 
     roll(n: number): Frame | void {
