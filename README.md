@@ -23,7 +23,7 @@ is called each time the player rolls a ball. The argument is the number of pins 
 
 
 ```
-fucntion score(): void
+function score(): void
 ``` 
 
 returns the total score for that game.
