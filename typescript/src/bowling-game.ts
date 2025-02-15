@@ -4,15 +4,14 @@ export class Game {
     private currentFrame: Frame;
 
     constructor() {
-        this.currentFrame = new GenericFrame();
+        this.currentFrame = new Frame();
         this.frames = [];
     }
 
     score(): number {
-        const currentFrameScore = this.currentFrame.score();
-        return this.frames.length == 0
-            ? currentFrameScore
-            : currentFrameScore + this.frames.map(it => it.score()).reduce(addNumbers);
+        const currentFrameScore = this.frames.length >= 10 ? 0 : this.currentFrame.score();
+        return currentFrameScore +
+            this.frames.filter((_, index) => index < 10).map(it => it.score()).reduce(addNumbers, 0);
     }
 
     roll(n: number): void {
@@ -28,44 +27,40 @@ export class Game {
     }
 }
 
-interface Frame {
-    score(): number;
-    roll(n: number): Frame | void;
-    rolls: number[]
-}
-
-class GenericFrame implements Frame {
-
-    private nextFrame: Frame
+class Frame {
 
     constructor() {
         this.rolls = []
     }
 
+    nextFrame: Frame;
+
     rolls: number[];
 
-    private isCompleted(): boolean {
-        return this.rolls.length >= 2 || this.score() >= 10
+    isCompleted(): boolean {
+        return this.rolls.length == 2 || this.score() == 10
     }
 
-    private isSpare(): boolean {
+    isSpare(): boolean {
         return this.rolls.length == 2 && this.rolls[0] + this.rolls[1] == 10
     }
 
-    private isStrike(): boolean {
+    isStrike(): boolean {
         return this.rolls.length == 1 && this.rolls[0] == 10
     }
 
     score(): number {
         if (this.isSpare()) {
-            const nextFrameRolls = this.nextFrame.rolls;
-            return nextFrameRolls.length == 0 ? 10 : 10 + nextFrameRolls[0];
+            if (this.nextFrame == undefined) {
+                return 10;
+            }
+            return 10 + this.nextFrame.pinsDownOnNext(1)
         }
         if (this.isStrike()) {
-            const nextFrameRolls = (this.nextFrame === undefined) ? [] : this.nextFrame.rolls;
-            return nextFrameRolls.length == 0
-                ? 10
-                : (nextFrameRolls.length == 1 ? 10 + nextFrameRolls[0] : 10 + nextFrameRolls[0] + nextFrameRolls[1]);
+            if (this.nextFrame == undefined) {
+                return 10;
+            }
+            return 10 + this.nextFrame.pinsDownOnNext(1) + this.nextFrame.pinsDownOnNext(2);
         }
         return this.rolls.length == 0 ? 0 : this.rolls.reduce(addNumbers);
     }
@@ -73,10 +68,23 @@ class GenericFrame implements Frame {
     roll(n: number): Frame | void {
         this.rolls.push(n);
         if (this.isCompleted()) {
-            const frame = new GenericFrame();
+            const frame = new Frame();
             this.nextFrame = frame;
             return frame;
         }
+    }
+
+    pinsDownOnNext(throwNumber: number): number {
+        if (this.rolls.length == 0) {
+            return 0;
+        }
+        if (this.rolls.length == 1 && throwNumber > 1) {
+            if (this.nextFrame == undefined) {
+                return 0;
+            }
+            return this.nextFrame.pinsDownOnNext(1);
+        }
+        return this.rolls[throwNumber - 1];
     }
 }
 
