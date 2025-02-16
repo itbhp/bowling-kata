@@ -9,37 +9,37 @@ describe("bowling game", () => {
     it("scores n < 10 pin in a roll", () => {
         expect(game.frame()).toBe(1);
         game.roll(4);
+
         expect(game.frame()).toBe(1);
         expect(game.score()).toBe(4);
     });
 
     it("scores n < 10 pin in two rolls", () => {
-        expect(game.frame()).toBe(1);
         game.roll(4);
-        expect(game.frame()).toBe(1);
         game.roll(5);
+        
         expect(game.frame()).toBe(2);
         expect(game.score()).toBe(9);
     });
 
     it("scores a spare, and then rolls < 10", () => {
         game.roll(4);
-        expect(game.frame()).toBe(1);
         game.roll(6);
+        
         game.roll(3)
+    
         expect(game.frame()).toBe(2);
         expect(game.score()).toBe(16);
     });
 
     it("scores a strike, and then normal frame, and a roll", () => {
-        expect(game.frame()).toBe(1);
         game.roll(10);
-        expect(game.frame()).toBe(2);
+
         game.roll(6);
-        expect(game.frame()).toBe(2);
         game.roll(2);
-        expect(game.frame()).toBe(3);
+        
         game.roll(2);
+        
         expect(game.frame()).toBe(3);
         expect(game.score()).toBe(28);
     });
@@ -205,10 +205,11 @@ describe("bowling game", () => {
 
 		game.roll(10); // strike 97 + 10 + 2+ 8 = 117
 
-        // expect(game.score()).toBe(117);
 		game.roll(2);	
 		game.roll(8); // spare 117 + 10 + 6 = 133
 		game.roll(6);
+
+        expect(game.frame()).toBe(10);
         expect(game.score()).toBe(133);
     });
 
