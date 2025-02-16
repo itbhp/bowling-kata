@@ -1,6 +1,7 @@
 package it.twinsbrain.kata;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -73,5 +74,16 @@ public class BowlingGameTest {
     game.roll(5); //90
 
     assertThat(game.score(), equalTo(90));
+  }
+
+  @Disabled
+  void one_spare_and_a_normal_frame() {
+    game.roll(4);
+    game.roll(6); //10
+
+    game.roll(4);
+    game.roll(5); //23
+
+    assertThat(game.score(), equalTo(23));
   }
 }
