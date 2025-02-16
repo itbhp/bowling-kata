@@ -31,4 +31,47 @@ public class BowlingGameTest {
 
     assertThat(game.score(), equalTo(pins));
   }
+
+  @Test
+  void on_multiple_rolls_no_spare_no_strike_right_score() {
+    game.roll(4);
+    game.roll(5);
+
+    assertThat(game.score(), equalTo(9));
+  }
+
+  @Test
+  void on_complete_game_no_spare_no_strike_right_score() {
+    game.roll(4);
+    game.roll(5); //9
+
+    game.roll(4);
+    game.roll(5); //18
+
+    game.roll(4);
+    game.roll(5); //27
+
+    game.roll(4);
+    game.roll(5); //36
+
+    game.roll(4);
+    game.roll(5); //45
+
+    game.roll(4);
+    game.roll(5); //54
+
+    game.roll(4);
+    game.roll(5); //63
+
+    game.roll(4);
+    game.roll(5); //72
+
+    game.roll(4);
+    game.roll(5); //81
+
+    game.roll(4);
+    game.roll(5); //90
+
+    assertThat(game.score(), equalTo(90));
+  }
 }
