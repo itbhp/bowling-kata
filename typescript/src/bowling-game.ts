@@ -33,7 +33,7 @@ class Frame {
         this.rolls = []
     }
 
-    nextFrame: Frame;
+    nextFrame?: Frame;
 
     rolls: number[];
 
@@ -51,16 +51,10 @@ class Frame {
 
     score(): number {
         if (this.isSpare()) {
-            if (this.nextFrame == undefined) {
-                return 10;
-            }
-            return 10 + this.nextFrame.pinsDownOnNext(1)
+            return 10 + pinsOnNextRollOrZero(this.nextFrame, 1)
         }
         if (this.isStrike()) {
-            if (this.nextFrame == undefined) {
-                return 10;
-            }
-            return 10 + this.nextFrame.pinsDownOnNext(1) + this.nextFrame.pinsDownOnNext(2);
+            return 10 + pinsOnNextRollOrZero(this.nextFrame, 1) + pinsOnNextRollOrZero(this.nextFrame, 2);
         }
         return this.rolls.reduce(addNumbers, 0);
     }
@@ -74,18 +68,19 @@ class Frame {
         }
     }
 
-    pinsDownOnNext(throwNumber: number): number {
+    pinsDownOnNext(roll: number): number {
         if (this.rolls.length == 0) {
             return 0;
         }
-        if (this.rolls.length == 1 && throwNumber > 1) {
-            if (this.nextFrame == undefined) {
-                return 0;
-            }
-            return this.nextFrame.pinsDownOnNext(1);
+        if (this.rolls.length == 1 && roll > 1) {
+            return pinsOnNextRollOrZero(this.nextFrame, 1);
         }
-        return this.rolls[throwNumber - 1];
+        return this.rolls[roll - 1];
     }
+}
+
+function pinsOnNextRollOrZero(frameOrNull: Frame | null, roll: number): number {
+    return frameOrNull?.pinsDownOnNext(roll) ?? 0;
 }
 
 const addNumbers = (prev: number, curr: number) => prev + curr;
