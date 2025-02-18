@@ -80,7 +80,7 @@ class Frame {
 }
 
 function pinsOnNextRollOrZero(frameOrNull: Frame | null, roll: number): number {
-    return frameOrNull?.pinsDownOnNext(roll) ?? 0;
+    return frameOrNull?.pinsDownOnNext(roll) || 0;
 }
 
 const addNumbers = (prev: number, curr: number) => prev + curr;
