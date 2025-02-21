@@ -16,7 +16,7 @@ export class Game {
 
     roll(n: number): void {
         const rollResult = this.currentFrame.roll(n);
-        if (typeof rollResult === "object") {
+        if (rollResult instanceof Frame) {
             this.frames.push(this.currentFrame);
             this.currentFrame = rollResult;
         }
