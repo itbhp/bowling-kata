@@ -116,36 +116,36 @@ describe("bowling game", () => {
     });
 
     it("scores nine normal frames, a strike plus two bonus rolls", () => {
+        game.roll(1); 
+        game.roll(2); // score: 3
+
         game.roll(1);
+        game.roll(4);  // score: 8
+
+        game.roll(1);
+        game.roll(6); // score: 15
+
         game.roll(2);
-
-        game.roll(1);
-        game.roll(4);
-
-        game.roll(1);
-        game.roll(6);
-
-        game.roll(2);
-        game.roll(1);
+        game.roll(1); // score: 18
         
         game.roll(2);
-        game.roll(2);
+        game.roll(2); // score: 22
         
         game.roll(3);
-        game.roll(3);
+        game.roll(3); // score: 28
         
         game.roll(2);
-        game.roll(0);
+        game.roll(0); // score: 30
         
         game.roll(8);
-        game.roll(1);
+        game.roll(1); // score: 39
         
         game.roll(1);
-        game.roll(6);
+        game.roll(6); // score: 46
         
         game.roll(10);
         game.roll(4);
-        game.roll(2);
+        game.roll(2);  // score: 62
         
         expect(game.frame()).toBe(10);
         expect(game.score()).toBe(62);
