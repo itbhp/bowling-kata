@@ -22,7 +22,7 @@ export class Game {
         }
     };
 
-    frame(): number {
+    playingFrame(): number {
         return Math.min(this.frames.length + 1, 10);
     }
 }
