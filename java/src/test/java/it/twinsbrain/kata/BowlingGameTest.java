@@ -1,13 +1,13 @@
 package it.twinsbrain.kata;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 class BowlingGameTest {
 
@@ -82,7 +82,7 @@ class BowlingGameTest {
     game.roll(6); //10
 
     game.roll(4);
-    game.roll(5); //23
+    game.roll(5); // 10 + 4 + 9 = 23
 
     assertThat(game.score(), equalTo(23));
   }
