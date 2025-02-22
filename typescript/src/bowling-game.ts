@@ -68,7 +68,7 @@ class Frame {
         }
     }
 
-    pinsDownOnNext(roll: number): number {
+    pinsDownOnTheNext(roll: number): number {
         if (this.rolls.length == 0) {
             return 0;
         }
@@ -80,7 +80,7 @@ class Frame {
 }
 
 function pinsOnNextRollOrZero(frameOrNull: Frame | null, roll: number): number {
-    return frameOrNull?.pinsDownOnNext(roll) || 0;
+    return frameOrNull?.pinsDownOnTheNext(roll) || 0;
 }
 
 const sum = (prev: number, curr: number) => prev + curr;
