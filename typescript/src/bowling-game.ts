@@ -11,7 +11,7 @@ export class Game {
     score(): number {
         const currentFrameScore = this.frames.length >= 10 ? 0 : this.currentFrame.score();
         return currentFrameScore +
-            this.frames.filter((_, index) => index < 10).map(it => it.score()).reduce(addNumbers, 0);
+            this.frames.filter((_, index) => index < 10).map(it => it.score()).reduce(sum, 0);
     }
 
     roll(n: number): void {
@@ -56,7 +56,7 @@ class Frame {
         if (this.isStrike()) {
             return 10 + pinsOnNextRollOrZero(this.nextFrame, 1) + pinsOnNextRollOrZero(this.nextFrame, 2);
         }
-        return this.rolls.reduce(addNumbers, 0);
+        return this.rolls.reduce(sum, 0);
     }
 
     roll(n: number): Frame | void {
@@ -83,4 +83,4 @@ function pinsOnNextRollOrZero(frameOrNull: Frame | null, roll: number): number {
     return frameOrNull?.pinsDownOnNext(roll) || 0;
 }
 
-const addNumbers = (prev: number, curr: number) => prev + curr;
+const sum = (prev: number, curr: number) => prev + curr;
