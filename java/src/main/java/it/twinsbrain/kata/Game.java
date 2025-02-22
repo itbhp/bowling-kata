@@ -12,13 +12,13 @@ public class Game {
   }
 
   public int score() {
-    var score = 0;
-    for (int i = 0; i < pins.size(); i = i + 2) {
-      score += pins.get(i);
-      if (i + 1 < pins.size()) {
-        score += pins.get(i+1);
+    var baseScore = pins.stream().mapToInt(i -> i).sum();
+    var bonus = 0;
+    for (int i = 2; i < pins.size(); i = i + 2) {
+      if (pins.get(i - 2) + pins.get(i - 1) == 10) {
+        bonus += pins.get(i);
       }
     }
-    return score;
+    return baseScore + bonus;
   }
 }

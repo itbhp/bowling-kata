@@ -4,10 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
 
 class BowlingGameTest {
 
@@ -28,62 +29,32 @@ class BowlingGameTest {
   @ParameterizedTest
   @ValueSource(ints = {1,2,3,4,5,6,7,8,9,10})
   void one_or_ten_pins_down_same_score(int pins) {
-    game.roll(pins);
-
+    roll(pins);
     assertThat(game.score(), equalTo(pins));
   }
 
   @Test
   void on_multiple_rolls_no_spare_no_strike_right_score() {
-    game.roll(4);
-    game.roll(5);
+    roll(4, 5);
 
     assertThat(game.score(), equalTo(9));
   }
 
   @Test
   void on_complete_game_no_spare_no_strike_right_score() {
-    game.roll(4);
-    game.roll(5); //9
+    roll(4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5);
 
-    game.roll(4);
-    game.roll(5); //18
-
-    game.roll(4);
-    game.roll(5); //27
-
-    game.roll(4);
-    game.roll(5); //36
-
-    game.roll(4);
-    game.roll(5); //45
-
-    game.roll(4);
-    game.roll(5); //54
-
-    game.roll(4);
-    game.roll(5); //63
-
-    game.roll(4);
-    game.roll(5); //72
-
-    game.roll(4);
-    game.roll(5); //81
-
-    game.roll(4);
-    game.roll(5); //90
-
-    assertThat(game.score(), equalTo(90));
+    assertThat(game.score(), equalTo(9 * 10)); // 90
   }
 
-  @Disabled
+  @Test
   void one_spare_and_a_normal_frame() {
-    game.roll(4);
-    game.roll(6); //10
+    roll(4, 6, 4, 5);
 
-    game.roll(4);
-    game.roll(5); // 10 + 4 + 9 = 23
+    assertThat(game.score(), equalTo(14 + 9)); // 23
+  }
 
-    assertThat(game.score(), equalTo(23));
+  private void roll(int...rolledPins) {
+    Arrays.stream(rolledPins).forEach(pins -> game.roll(pins));
   }
 }
