@@ -5,20 +5,31 @@ import java.util.List;
 
 public class Game {
 
-  private final List<Integer> pins = new ArrayList<>();
+  private final List<Integer> rolls = new ArrayList<>();
 
   public void roll(int pins) {
-    this.pins.add(pins);
+    this.rolls.add(pins);
   }
 
   public int score() {
-    var baseScore = pins.stream().mapToInt(i -> i).sum();
-    var bonus = 0;
-    for (int i = 2; i < pins.size(); i = i + 2) {
-      if (pins.get(i - 2) + pins.get(i - 1) == 10) {
-        bonus += pins.get(i);
+    var score = 0;
+    var index = 0;
+    while (index < rolls.size()) {
+      var frameScore = rolls.get(index);
+      var moveIndex = 0;
+      if (index + 1 < rolls.size() - 1) {
+        frameScore += rolls.get(index + 1);
+        moveIndex = 2;
+      } else {
+        moveIndex = 1;
       }
+
+      if (frameScore == 10 && (index + 2) < rolls.size() - 1) {
+        frameScore += rolls.get(index + 2);
+      }
+      index = index + moveIndex;
+      score += frameScore;
     }
-    return baseScore + bonus;
+    return score;
   }
 }
