@@ -76,6 +76,28 @@ class BowlingGameTest {
     assertThat(game.score(), equalTo(4 * 18 + 14)); // 86
   }
 
+  @Test
+  void strike_and_a_normal_frame() {
+    roll(10);
+    roll(4, 4);
+
+    assertThat(game.score(), equalTo(18 + 8)); // 22
+  }
+
+  @Test
+  void strike_on_the_last_frame() {
+    rollManySameFrame(9,2,4);
+    roll(10, 4, 4);
+
+    assertThat(game.score(), equalTo(9 * 6 + 18  )); // 72
+  }
+
+  @Test
+  void gold_game_all_strikes(){
+    rollMany(12, 10);
+    assertThat(game.score(), equalTo(300));
+  }
+
   private void roll(int... rolledPins) {
     Arrays.stream(rolledPins).forEach(pins -> game.roll(pins));
   }
