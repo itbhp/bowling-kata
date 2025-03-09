@@ -121,4 +121,32 @@ class FramesParserTest {
                 new Strike(10, 10, 9),
                 new Strike(10, 10, 10))));
   }
+
+  @Test
+  void two_strikes() {
+    assertThat(
+            parse(Collections.nCopies(2, 10)),
+            equalTo(
+                    List.of(
+                            new Strike(10, null, 1),
+                            new Strike(null, null, 2))));
+  }
+
+  @Test
+  void parses_incomplete_gold_game_all_strikes() {
+    assertThat(
+            parse(Collections.nCopies(10, 10)),
+            equalTo(
+                    List.of(
+                            new Strike(10, 10, 1),
+                            new Strike(10, 10, 2),
+                            new Strike(10, 10, 3),
+                            new Strike(10, 10, 4),
+                            new Strike(10, 10, 5),
+                            new Strike(10, 10, 6),
+                            new Strike(10, 10, 7),
+                            new Strike(10, 10, 8),
+                            new Strike(10, null, 9),
+                            new Strike(null, null, 10))));
+  }
 }

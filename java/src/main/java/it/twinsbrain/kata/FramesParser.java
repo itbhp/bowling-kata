@@ -10,6 +10,8 @@ public class FramesParser {
   }
 
   private static class Parser {
+    protected static int MAXIMUM_NUMBER_OF_FRAMES = 10;
+    protected static int MAXIMUM_NUMBER_OF_PINS = 10;
     private State state = new EmptyFrame();
 
     public void accept(int roll) {
@@ -31,6 +33,7 @@ public class FramesParser {
     }
 
     private sealed interface State {
+
       Optional<State> previous();
 
       State accept(int roll);
@@ -46,7 +49,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll == 10) {
+        if (roll == MAXIMUM_NUMBER_OF_PINS) {
           return new StrikeMissingBonuses(this, 0);
         }
         return new IncompleteFrame(roll, this, 0);
@@ -67,7 +70,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll + firstRoll == 10) {
+        if (roll + firstRoll == MAXIMUM_NUMBER_OF_PINS) {
           return new SpareMissingBonus(firstRoll, roll, previousState, frameNumber);
         }
         return new OpenFrame(firstRoll, roll, previousState, frameNumber + 1);
@@ -88,7 +91,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll == 10) {
+        if (roll == MAXIMUM_NUMBER_OF_PINS) {
           return new StrikeMissingBonuses(this, frameNumber);
         }
         return new IncompleteFrame(roll, this, frameNumber);
@@ -110,7 +113,7 @@ public class FramesParser {
       @Override
       public State accept(int roll) {
         var spareWithBonus = new Spare(first, second, roll, previousState, frameNumber + 1);
-        if (frameNumber + 1 < 10) {
+        if (frameNumber + 1 < MAXIMUM_NUMBER_OF_FRAMES) {
           return new IncompleteFrame(roll, spareWithBonus, frameNumber + 1);
         } else {
           return spareWithBonus;
@@ -132,7 +135,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        throw new IllegalStateException("completed in the IncompleteSpare");
+        throw new IllegalStateException("Cannot happen, completed in the SpareMissingBonus");
       }
 
       @Override
@@ -150,8 +153,8 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll == 10) {
-          return new TwoStrikes(previousState, frameNumber);
+        if (roll == MAXIMUM_NUMBER_OF_PINS) {
+          return new TwoConsecutiveStrikes(previousState, frameNumber);
         } else return new StrikeAndIncompleteFrame(previousState, roll, frameNumber);
       }
 
@@ -161,7 +164,7 @@ public class FramesParser {
       }
     }
 
-    private record TwoStrikes(State previousState, int frameNumber) implements State {
+    private record TwoConsecutiveStrikes(State previousState, int frameNumber) implements State {
       @Override
       public Optional<State> previous() {
         return Optional.of(previousState);
@@ -169,9 +172,9 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        var strike = new Strike(10, roll, previousState, frameNumber + 1);
-        if (roll == 10) {
-          return new TwoStrikes(strike, frameNumber + 1);
+        var strike = new Strike(MAXIMUM_NUMBER_OF_PINS, roll, previousState, frameNumber + 1);
+        if (roll == MAXIMUM_NUMBER_OF_PINS) {
+          return new TwoConsecutiveStrikes(strike, frameNumber + 1);
         } else {
           return new StrikeAndIncompleteFrame(strike, roll, frameNumber + 1);
         }
@@ -179,7 +182,13 @@ public class FramesParser {
 
       @Override
       public List<Frame> toFrames() {
-        return List.of();
+        if (frameNumber + 2 <= MAXIMUM_NUMBER_OF_FRAMES) {
+          return List.of(
+              new it.twinsbrain.kata.Strike(MAXIMUM_NUMBER_OF_PINS, null, frameNumber + 1),
+              new it.twinsbrain.kata.Strike(null, null, frameNumber + 2));
+        } else {
+          return List.of();
+        }
       }
     }
 
@@ -195,7 +204,7 @@ public class FramesParser {
       public State accept(int roll) {
         var strikeFrameNumber = frameNumber + 1;
         var strike = new Strike(first, roll, previousState, strikeFrameNumber);
-        if (strikeFrameNumber == 10) {
+        if (strikeFrameNumber == MAXIMUM_NUMBER_OF_FRAMES) {
           return strike;
         } else {
           return new OpenFrame(first, roll, strike, frameNumber + 2);
@@ -219,7 +228,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll == 10) {
+        if (roll == MAXIMUM_NUMBER_OF_PINS) {
           return new StrikeMissingBonuses(this, frameNumber);
         }
         return new IncompleteFrame(roll, this, frameNumber);
