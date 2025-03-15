@@ -3,6 +3,9 @@ package it.twinsbrain.kata;
 import java.util.*;
 
 public class FramesParser {
+  private FramesParser() {
+  }
+
   public static List<Frame> parse(List<Integer> rolls) {
     var parser = new Parser();
     rolls.forEach(parser::accept);
@@ -10,8 +13,8 @@ public class FramesParser {
   }
 
   private static class Parser {
-    protected static int MAXIMUM_NUMBER_OF_FRAMES = 10;
-    protected static int MAXIMUM_NUMBER_OF_PINS = 10;
+    protected static final int MAXIMUM_NUMBER_OF_FRAMES = 10;
+    protected static final int MAXIMUM_NUMBER_OF_PINS = 10;
     private State state = new EmptyFrame();
 
     public void accept(int roll) {
