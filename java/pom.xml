@@ -10,6 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
@@ -26,9 +28,6 @@
         <logback-classic.version>1.5.17</logback-classic.version>
         <sonar-maven-plugin.version>5.0.0.4389</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     </properties>
 
     <dependencies>
@@ -95,10 +94,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <argLine>--enable-preview</argLine>
-                    <forkCount>1</forkCount>
-                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
@@ -152,39 +147,20 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
-                            <append>true</append>
-                            <destFile>${sonar.jacoco.reportPath}</destFile>
-                            <!-- Sets the VM argument line used when unit tests are run. -->
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>verify</phase>
+                        <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <!-- select non-aggregate reports -->
-                            <report>report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>
