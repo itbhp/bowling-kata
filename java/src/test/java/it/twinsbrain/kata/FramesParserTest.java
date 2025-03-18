@@ -23,6 +23,13 @@ class FramesParserTest {
   }
 
   @Test
+  void parses_a_spare() {
+    assertThat(
+        parse(List.of(6, 4)),
+        equalTo(List.of(new Spare(6, 4, null, 1))));
+  }
+
+  @Test
   void parses_an_open_frame_a_spare_and_an_incomplete_open_frame() {
     assertThat(
         parse(List.of(5, 4, 6, 4, 2)),
@@ -130,6 +137,29 @@ class FramesParserTest {
                     List.of(
                             new Strike(10, null, 1),
                             new Strike(null, null, 2))));
+  }
+
+  @Test
+  void two_strikes_and_two_normal_frames() {
+    assertThat(
+        parse(List.of(10, 10, 2, 3, 4, 5)),
+        equalTo(
+            List.of(
+                new Strike(10, 2, 1),
+                new Strike(2, 3, 2),
+                new OpenFrame(2, 3, 3),
+                new OpenFrame(4, 5, 4))));
+  }
+
+  @Test
+  void strike_and_two_normal_frames() {
+    assertThat(
+            parse(List.of(10, 2, 3, 4, 5)),
+            equalTo(
+                    List.of(
+                            new Strike(2, 3, 1),
+                            new OpenFrame(2, 3, 2),
+                            new OpenFrame(4, 5, 3))));
   }
 
   @Test

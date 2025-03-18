@@ -138,7 +138,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        throw new IllegalStateException("Cannot happen, completed in the SpareMissingBonus");
+        throw new UnsupportedOperationException("Cannot happen, accept performed in SpareMissingBonus");
       }
 
       @Override
@@ -231,10 +231,7 @@ public class FramesParser {
 
       @Override
       public State accept(int roll) {
-        if (roll == MAXIMUM_NUMBER_OF_PINS) {
-          return new StrikeMissingBonuses(this, frameNumber);
-        }
-        return new IncompleteFrame(roll, this, frameNumber);
+       throw new UnsupportedOperationException("Cannot happen, accept performed in StrikeAndIncompleteFrame or TwoConsecutiveStrikes");
       }
 
       @Override
