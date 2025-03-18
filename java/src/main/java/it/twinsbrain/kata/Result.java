@@ -13,7 +13,7 @@ public class Result {
         value += frameScore;
     }
 
-    public int value() {
+    public int score() {
         return value;
     }
 

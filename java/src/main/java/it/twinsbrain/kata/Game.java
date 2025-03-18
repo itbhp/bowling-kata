@@ -15,6 +15,6 @@ public class Game {
     var frames = FramesParser.parse(rolls);
     var result = new Result();
     frames.forEach(frame -> frame.addScoreTo(result));
-    return result.value();
+    return result.score();
   }
 }
